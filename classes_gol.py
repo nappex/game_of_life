@@ -44,7 +44,7 @@ class Game:
             return num
 
     def choose_option(self):
-        options = ["Square", "Random", "Longlife", "Line"]
+        options = ["Square", "Random", "Longlife", "Stable"]
         print("Choose start of game: \n")
         for i, option in enumerate(options):
             print(f"{i}: {option} shape")
@@ -64,11 +64,31 @@ class Game:
             c_index = randrange(self.game_field_width)
             self.field[l_index][c_index] = self.mark_alive
 
-    def line_shape(self):
+    def stable_shapes(self):
         middle_h = int(self.game_field_height / 2)
         middle_w = int(self.game_field_width / 2)
+
+        # Blinker
         for coord_w in range(3):
             self.field[middle_h][middle_w + coord_w] = self.mark_alive
+
+        # Toad
+        for line in range(2):
+            for coord_w in range(3):
+                self.field[middle_h + 5 + line][
+                    middle_w + coord_w + line
+                ] = self.mark_alive
+
+        start_line = 4
+        start_column = 3
+
+        # Beacon
+        for square in range(2):
+            for l_index in range(0, 2):
+                for c_index in range(0, 2):
+                    self.field[start_line + l_index + (square * 2)][
+                        start_column + c_index + (square * 2)
+                    ] = self.mark_alive
 
     def longlife_shape(self):
         middle_h = int(self.game_field_height / 2)
@@ -88,7 +108,7 @@ class Game:
         if option == "2":
             self.longlife_shape()
         if option == "3":
-            self.line_shape()
+            self.stable_shapes()
 
     def count_alive(self, line_coord, column_coord):
         alive_organism = 0
